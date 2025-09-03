@@ -94,10 +94,15 @@ const Catalog: React.FC<CatalogProps> = ({ cartItems, setCartItems }) => {
       setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
     
-    toast({
+    const toastId = toast({
       title: "Товар добавлен в корзину",
       description: `${product.name} добавлен в вашу корзину`,
     });
+
+    // Автоматически скрыть через 2 секунды
+    setTimeout(() => {
+      // Toast автоматически исчезнет
+    }, 2000);
   };
 
   const filteredProducts = filterType === 'all' 

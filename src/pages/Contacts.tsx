@@ -50,19 +50,7 @@ const Contacts = () => {
                 </CardContent>
               </Card>
 
-              {/* Address */}
-              <Card>
-                <CardContent className="flex items-center space-x-4 pt-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Icon name="MapPin" size={24} className="text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Адрес офиса</h3>
-                    <p className="text-muted-foreground">Москва, ул. Банная, д. 15, офис 301</p>
-                    <p className="text-muted-foreground">Станция метро: Сокольники</p>
-                  </div>
-                </CardContent>
-              </Card>
+
 
               {/* Working Hours */}
               <Card>
@@ -80,21 +68,27 @@ const Contacts = () => {
               </Card>
             </div>
 
-            {/* Social Media */}
+            {/* Messenger Contacts */}
             <div className="mt-8">
-              <h3 className="text-xl font-bold mb-4">Мы в социальных сетях</h3>
-              <div className="flex space-x-4">
-                <Button variant="outline" size="lg">
-                  <Icon name="MessageCircle" size={20} className="mr-2" />
-                  VKontakte
+              <h3 className="text-xl font-bold mb-4">Быстрая связь</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="h-16 flex-col bg-green-50 hover:bg-green-100 border-green-200"
+                  onClick={() => window.open('https://wa.me/78005553535', '_blank')}
+                >
+                  <Icon name="MessageCircle" size={24} className="mb-1 text-green-600" />
+                  <span className="text-green-600">WhatsApp</span>
                 </Button>
-                <Button variant="outline" size="lg">
-                  <Icon name="Send" size={20} className="mr-2" />
-                  Telegram
-                </Button>
-                <Button variant="outline" size="lg">
-                  <Icon name="Users" size={20} className="mr-2" />
-                  Одноклассники
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="h-16 flex-col bg-blue-50 hover:bg-blue-100 border-blue-200"
+                  onClick={() => window.open('https://t.me/ekoveniks', '_blank')}
+                >
+                  <Icon name="Send" size={24} className="mb-1 text-blue-600" />
+                  <span className="text-blue-600">Telegram</span>
                 </Button>
               </div>
             </div>
@@ -244,32 +238,39 @@ const Contacts = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Да, при заказе от 10 веников действует скидка 10%, от 20 веников — 15%.
-                  Для оптовых покупателей предусмотрены специальные цены.
+                  Да, при заказе от 5 веников действует скидка 10% автоматически.
+                  Для оптовых покупателей предусмотрены дополнительные условия.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Как правильно подготовить веник?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Замочите веник в теплой воде на 20-30 минут. Березовые веники 
+                  можно ополоснуть кипятком для лучшего аромата.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Какой веник выбрать новичку?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Рекомендуем начать с березового веника — он мягкий, ароматный и 
+                  подходит для всех типов кожи. Дубовый веник более плотный и долговечный.
                 </p>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        {/* Map Section */}
-        <section className="mt-16 text-center">
-          <h2 className="text-3xl font-bold mb-8">Как нас найти</h2>
-          <div className="bg-muted/50 rounded-lg p-12">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Icon name="Map" size={32} className="text-primary" />
-            </div>
-            <h3 className="text-xl font-bold mb-4">Наш офис в Москве</h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Приезжайте к нам в офис, чтобы лично посмотреть на качество наших веников
-              и получить профессиональную консультацию
-            </p>
-            <Button>
-              <Icon name="Navigation" size={20} className="mr-2" />
-              Построить маршрут
-            </Button>
-          </div>
-        </section>
+
       </div>
     </div>
   );

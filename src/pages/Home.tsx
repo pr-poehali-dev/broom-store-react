@@ -8,17 +8,22 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-5xl font-bold mb-6 text-primary">
+      <section 
+        className="py-20 bg-cover bg-center bg-no-repeat relative"
+        style={{ 
+          backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/531bccf3-518d-476e-8871-9a5801e71468.jpg')" 
+        }}
+      >
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-5xl font-bold mb-6 text-white">
             Натуральные веники для бани
           </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             Отборные веники из экологически чистых материалов. 
             Традиционное качество, современный сервис.
           </p>
           <Link to="/catalog">
-            <Button size="lg" className="animate-fade-in">
+            <Button size="lg" className="animate-fade-in bg-white text-primary hover:bg-gray-100">
               Перейти в каталог
               <Icon name="ArrowRight" size={20} className="ml-2" />
             </Button>

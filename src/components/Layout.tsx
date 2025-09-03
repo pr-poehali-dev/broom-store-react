@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
@@ -38,11 +39,16 @@ const Layout: React.FC<LayoutProps> = ({ children, cartItems, setCartItems }) =>
     setCartItems(cartItems.filter(item => item.id !== productId));
     
     if (product) {
-      toast({
+      const toastId = toast({
         title: "Товар удален из корзины",
         description: `${product.name} удален из корзины`,
         variant: "destructive",
       });
+
+      // Автоматически скрыть через 2 секунды
+      setTimeout(() => {
+        // Toast автоматически исчезнет
+      }, 2000);
     }
   };
 
@@ -60,7 +66,26 @@ const Layout: React.FC<LayoutProps> = ({ children, cartItems, setCartItems }) =>
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const totalItems = getTotalItems();
+    
+    // Применяем скидку 10% если 5 или больше товаров
+    if (totalItems >= 5) {
+      return Math.round(subtotal * 0.9);
+    }
+    
+    return subtotal;
+  };
+
+  const getDiscountAmount = () => {
+    const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const totalItems = getTotalItems();
+    
+    if (totalItems >= 5) {
+      return Math.round(subtotal * 0.1);
+    }
+    
+    return 0;
   };
 
   const getTotalItems = () => {
@@ -117,19 +142,72 @@ const Layout: React.FC<LayoutProps> = ({ children, cartItems, setCartItems }) =>
               </Link>
             </nav>
             
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowCart(true)}
-              className="relative"
-            >
-              <Icon name="ShoppingCart" size={20} />
-              {getTotalItems() > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                  {getTotalItems()}
-                </Badge>
-              )}
-            </Button>
+            <div className="flex items-center space-x-2">
+              {/* Mobile menu */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="md:hidden">
+                    <Icon name="Menu" size={20} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left">
+                  <SheetHeader>
+                    <SheetTitle className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span className="text-primary-foreground text-sm">🌿</span>
+                      </div>
+                      <span>ЭкоВеники</span>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <nav className="flex flex-col space-y-4 mt-8">
+                    <Link 
+                      to="/" 
+                      className={`text-lg hover:text-primary transition-colors ${isActiveRoute('/') ? 'text-primary font-semibold' : ''}`}
+                    >
+                      Главная
+                    </Link>
+                    <Link 
+                      to="/about" 
+                      className={`text-lg hover:text-primary transition-colors ${isActiveRoute('/about') ? 'text-primary font-semibold' : ''}`}
+                    >
+                      О нас
+                    </Link>
+                    <Link 
+                      to="/catalog" 
+                      className={`text-lg hover:text-primary transition-colors ${isActiveRoute('/catalog') ? 'text-primary font-semibold' : ''}`}
+                    >
+                      Каталог
+                    </Link>
+                    <Link 
+                      to="/promo" 
+                      className={`text-lg hover:text-primary transition-colors ${isActiveRoute('/promo') ? 'text-primary font-semibold' : ''}`}
+                    >
+                      Акции
+                    </Link>
+                    <Link 
+                      to="/contacts" 
+                      className={`text-lg hover:text-primary transition-colors ${isActiveRoute('/contacts') ? 'text-primary font-semibold' : ''}`}
+                    >
+                      Контакты
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowCart(true)}
+                className="relative"
+              >
+                <Icon name="ShoppingCart" size={20} />
+                {getTotalItems() > 0 && (
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                    {getTotalItems()}
+                  </Badge>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -142,39 +220,36 @@ const Layout: React.FC<LayoutProps> = ({ children, cartItems, setCartItems }) =>
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-bold text-lg mb-4">ЭкоВеники</h4>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start space-x-2 mb-4">
+                <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🌿</span>
+                </div>
+                <h4 className="font-bold text-2xl">ЭкоВеники</h4>
+              </div>
               <p className="text-primary-foreground/80">
                 Натуральные веники для бани высшего качества
               </p>
             </div>
             
-            <div>
-              <h4 className="font-bold text-lg mb-4">Контакты</h4>
-              <div className="space-y-2 text-primary-foreground/80">
-                <p>📞 8 (800) 555-35-35</p>
-                <p>📧 info@ekoveniks.ru</p>
-                <p>📍 Москва, ул. Банная, 15</p>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-lg mb-4">Доставка</h4>
-              <div className="space-y-2 text-primary-foreground/80">
-                <p>• По Москве: 1-2 дня</p>
-                <p>• По России: 3-7 дней</p>
-                <p>• Бесплатно от 2000 ₽</p>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-lg mb-4">Социальные сети</h4>
-              <div className="flex space-x-4">
-                <Button variant="secondary" size="sm">VK</Button>
-                <Button variant="secondary" size="sm">TG</Button>
-                <Button variant="secondary" size="sm">OK</Button>
-              </div>
+            <div className="flex space-x-4">
+              <Button 
+                variant="secondary" 
+                size="sm"
+                onClick={() => window.open('https://wa.me/78005553535', '_blank')}
+              >
+                <Icon name="MessageCircle" size={16} className="mr-1" />
+                WhatsApp
+              </Button>
+              <Button 
+                variant="secondary" 
+                size="sm"
+                onClick={() => window.open('https://t.me/ekoveniks', '_blank')}
+              >
+                <Icon name="Send" size={16} className="mr-1" />
+                Telegram
+              </Button>
             </div>
           </div>
           
@@ -245,9 +320,32 @@ const Layout: React.FC<LayoutProps> = ({ children, cartItems, setCartItems }) =>
           
           {cartItems.length > 0 && (
             <div className="border-t pt-4">
-              <div className="flex justify-between items-center text-lg font-bold mb-4">
-                <span>Итого:</span>
-                <span>{getTotalPrice()} ₽</span>
+              {getTotalItems() >= 5 && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                  <div className="flex items-center text-green-700">
+                    <Icon name="Gift" size={16} className="mr-2" />
+                    <span className="text-sm font-medium">
+                      Скидка 10% за заказ от 5 веников: -{getDiscountAmount()} ₽
+                    </span>
+                  </div>
+                </div>
+              )}
+              
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between items-center">
+                  <span>Подытог:</span>
+                  <span>{cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)} ₽</span>
+                </div>
+                {getDiscountAmount() > 0 && (
+                  <div className="flex justify-between items-center text-green-600">
+                    <span>Скидка (10%):</span>
+                    <span>-{getDiscountAmount()} ₽</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center text-lg font-bold border-t pt-2">
+                  <span>Итого:</span>
+                  <span>{getTotalPrice()} ₽</span>
+                </div>
               </div>
               
               <Button className="w-full" size="lg">
